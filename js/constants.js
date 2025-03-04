@@ -906,4 +906,4 @@ const TRANSLATIONS = {
         "encoding": "UTF-8",
         "direction": "LTR"
     }
-}
+};
