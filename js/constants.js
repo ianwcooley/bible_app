@@ -1,90 +1,333 @@
-const BOOKS = [
-    "Genesis",
-    "Exodus",
-    "Leviticus",
-    "Numbers",
-    "Deuteronomy",
-    "Joshua",
-    "Judges",
-    "Ruth",
-    "1 Samuel",
-    "2 Samuel",
-    "1 Kings",
-    "2 Kings",
-    "1 Chronicles",
-    "2 Chronicles",
-    "Ezra",
-    "Nehemiah",
-    "Esther",
-    "Job",
-    "Psalms",
-    "Proverbs",
-    "Ecclesiastes",
-    "Song of Songs",
-    "Isaiah",
-    "Jeremiah",
-    "Lamentations",
-    "Ezekiel",
-    "Daniel",
-    "Hosea",
-    "Joel",
-    "Amos",
-    "Obadiah",
-    "Jonah",
-    "Micah",
-    "Nahum",
-    "Habakkuk",
-    "Zephaniah",
-    "Haggai",
-    "Zechariah",
-    "Malachi",
-    "Matthew",
-    "Mark",
-    "Luke",
-    "John",
-    "Acts",
-    "Romans",
-    "1 Corinthians",
-    "2 Corinthians",
-    "Galatians",
-    "Ephesians",
-    "Philippians",
-    "Colossians",
-    "1 Thessalonians",
-    "2 Thessalonians",
-    "1 Timothy",
-    "2 Timothy",
-    "Titus",
-    "Philemon",
-    "Hebrews",
-    "James",
-    "1 Peter",
-    "2 Peter",
-    "1 John",
-    "2 John",
-    "3 John",
-    "Jude",
-    "Revelation",
-    "Song of Solomon",
-    "Revelation of John",
-    "1 Esdras",
-    "2 Esdras",
-    "Tobit",
-    "Judith",
-    "Wisdom",
-    "Sirach",
-    "Baruch",
-    "Prayer of Manasses",
-    "1 Maccabees",
-    "2 Maccabees"
-];
-
-const APOCRYPHA = ["1 Esdras", "2 Esdras", "Tobit", "Judith",
-    "Additions to Esther", "Wisdom of Solomon", "Sirach (Ecclesiasticus)", "Baruch",
-    "Letter of Jeremiah", "Prayer of Azariah and Song of the Three Young Men",
-    "Susanna", "Bel and the Dragon", "Prayer of Manasseh",
-    "1 Maccabees", "2 Maccabees"];
-
+const BOOKS = {
+    "1": {
+        "name": "Genesis",
+        "chapters": {}
+    },
+    "2": {
+        "name": "Exodus",
+        "chapters": {}
+    },
+    "3": {
+        "name": "Leviticus",
+        "chapters": {}
+    },
+    "4": {
+        "name": "Numbers",
+        "chapters": {}
+    },
+    "5": {
+        "name": "Deuteronomy",
+        "chapters": {}
+    },
+    "6": {
+        "name": "Joshua",
+        "chapters": {}
+    },
+    "7": {
+        "name": "Judges",
+        "chapters": {}
+    },
+    "8": {
+        "name": "Ruth",
+        "chapters": {}
+    },
+    "9": {
+        "name": "1 Samuel",
+        "chapters": {}
+    },
+    "10": {
+        "name": "2 Samuel",
+        "chapters": {}
+    },
+    "11": {
+        "name": "1 Kings",
+        "chapters": {}
+    },
+    "12": {
+        "name": "2 Kings",
+        "chapters": {}
+    },
+    "13": {
+        "name": "1 Chronicles",
+        "chapters": {}
+    },
+    "14": {
+        "name": "2 Chronicles",
+        "chapters": {}
+    },
+    "15": {
+        "name": "Ezra",
+        "chapters": {}
+    },
+    "16": {
+        "name": "Nehemiah",
+        "chapters": {}
+    },
+    "17": {
+        "name": "Esther",
+        "chapters": {}
+    },
+    "18": {
+        "name": "Job",
+        "chapters": {}
+    },
+    "19": {
+        "name": "Psalms",
+        "chapters": {}
+    },
+    "20": {
+        "name": "Proverbs",
+        "chapters": {}
+    },
+    "21": {
+        "name": "Ecclesiastes",
+        "chapters": {}
+    },
+    "22": {
+        "name": "Song of Songs",
+        "chapters": {}
+    },
+    "23": {
+        "name": "Isaiah",
+        "chapters": {}
+    },
+    "24": {
+        "name": "Jeremiah",
+        "chapters": {}
+    },
+    "25": {
+        "name": "Lamentations",
+        "chapters": {}
+    },
+    "26": {
+        "name": "Ezekiel",
+        "chapters": {}
+    },
+    "27": {
+        "name": "Daniel",
+        "chapters": {}
+    },
+    "28": {
+        "name": "Hosea",
+        "chapters": {}
+    },
+    "29": {
+        "name": "Joel",
+        "chapters": {}
+    },
+    "30": {
+        "name": "Amos",
+        "chapters": {}
+    },
+    "31": {
+        "name": "Obadiah",
+        "chapters": {}
+    },
+    "32": {
+        "name": "Jonah",
+        "chapters": {}
+    },
+    "33": {
+        "name": "Micah",
+        "chapters": {}
+    },
+    "34": {
+        "name": "Nahum",
+        "chapters": {}
+    },
+    "35": {
+        "name": "Habakkuk",
+        "chapters": {}
+    },
+    "36": {
+        "name": "Zephaniah",
+        "chapters": {}
+    },
+    "37": {
+        "name": "Haggai",
+        "chapters": {}
+    },
+    "38": {
+        "name": "Zechariah",
+        "chapters": {}
+    },
+    "39": {
+        "name": "Malachi",
+        "chapters": {}
+    },
+    "40": {
+        "name": "Matthew",
+        "chapters": {}
+    },
+    "41": {
+        "name": "Mark",
+        "chapters": {}
+    },
+    "42": {
+        "name": "Luke",
+        "chapters": {}
+    },
+    "43": {
+        "name": "John",
+        "chapters": {}
+    },
+    "44": {
+        "name": "Acts",
+        "chapters": {}
+    },
+    "45": {
+        "name": "Romans",
+        "chapters": {}
+    },
+    "46": {
+        "name": "1 Corinthians",
+        "chapters": {}
+    },
+    "47": {
+        "name": "2 Corinthians",
+        "chapters": {}
+    },
+    "48": {
+        "name": "Galatians",
+        "chapters": {}
+    },
+    "49": {
+        "name": "Ephesians",
+        "chapters": {}
+    },
+    "50": {
+        "name": "Philippians",
+        "chapters": {}
+    },
+    "51": {
+        "name": "Colossians",
+        "chapters": {}
+    },
+    "52": {
+        "name": "1 Thessalonians",
+        "chapters": {}
+    },
+    "53": {
+        "name": "2 Thessalonians",
+        "chapters": {}
+    },
+    "54": {
+        "name": "1 Timothy",
+        "chapters": {}
+    },
+    "55": {
+        "name": "2 Timothy",
+        "chapters": {}
+    },
+    "56": {
+        "name": "Titus",
+        "chapters": {}
+    },
+    "57": {
+        "name": "Philemon",
+        "chapters": {}
+    },
+    "58": {
+        "name": "Hebrews",
+        "chapters": {}
+    },
+    "59": {
+        "name": "James",
+        "chapters": {}
+    },
+    "60": {
+        "name": "1 Peter",
+        "chapters": {}
+    },
+    "61": {
+        "name": "2 Peter",
+        "chapters": {}
+    },
+    "62": {
+        "name": "1 John",
+        "chapters": {}
+    },
+    "63": {
+        "name": "2 John",
+        "chapters": {}
+    },
+    "64": {
+        "name": "3 John",
+        "chapters": {}
+    },
+    "65": {
+        "name": "Jude",
+        "chapters": {}
+    },
+    "66": {
+        "name": "Revelation",
+        "chapters": {}
+    },
+    "67": {
+        "name": "1 Esdras",
+        "chapters": {}
+    },
+    "68": {
+        "name": "2 Esdras",
+        "chapters": {}
+    },
+    "69": {
+        "name": "Tobit",
+        "chapters": {}
+    },
+    "70": {
+        "name": "Judith",
+        "chapters": {}
+    },
+    "71": {
+        "name": "Esther (Greek)",
+        "chapters": {}
+    },
+    "73": {
+        "name": "Wisdom",
+        "chapters": {}
+    },
+    "74": {
+        "name": "Sirach",
+        "chapters": {}
+    },
+    "75": {
+        "name": "Baruch",
+        "chapters": {}
+    },
+    "76": {
+        "name": "Prayer of Azariah",
+        "chapters": {}
+    },
+    "77": {
+        "name": "Susanna",
+        "chapters": {}
+    },
+    "78": {
+        "name": "Bel and the Dragon",
+        "chapters": {}
+    },
+    "79": {
+        "name": "Prayer of Manasses",
+        "chapters": {}
+    },
+    "80": {
+        "name": "1 Maccabees",
+        "chapters": {}
+    },
+    "81": {
+        "name": "2 Maccabees",
+        "chapters": {}
+    },
+    "82": {
+        "name": "III Maccabees",
+        "chapters": {}
+    },
+    "83": {
+        "name": "IV Maccabees",
+        "chapters": {}
+    }
+};
 
 const TRANSLATIONS = {
     "akjv": {
