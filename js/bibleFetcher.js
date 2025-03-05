@@ -53,7 +53,8 @@ function sleep(ms) {
 async function processAllTranslations(translations) {
     for (const translation in translations) {
         console.log(`Processing translation: ${translation}`);
-
+        console.log("sleeping 5 seconds... (server needs a breather)")
+        await sleep(5000);
         const books = await fetchBooksForTranslation(translation);
         // if (books.length === 0) {
         //     console.warn(`No books found for ${translation}`);
@@ -77,18 +78,40 @@ async function processAllTranslations(translations) {
                 // console.log(`      Fetched verses for ${book} ${chapter}`);
             }
             const duration = Date.now() - start;
-            if (duration > 5000) {
-                console.log("Server backup: waiting 10 seconds");
-                await sleep(10000);
-            }
+            // if (duration > 5000) {
+            //     console.log("Server backup: waiting 10 seconds");
+            //     await sleep(10000);
+            // }
         }
     }
 }
 
+async function retrieveAllTranslations(translations) {
+    for (const translation in translations) {
+        console.log('Retrieving translation: ', translation);
+        const url = `https://api.getbible.net/v2/${translation}.json`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch ${translation}: ${response.status}`);
+            }
+            console.log('success!');
+            let bigBoy = await response.json(); 
+            if (translation === 'coptic')
+                console.log(bigBoy);
+        } catch (error) {
+            console.error(`Error fetching books for ${translation}:`, error.message);
+            return {}; // Return empty object if books cannot be fetched
+        }
+    }
+}
 
 // Example usage:
 const translations = ['kjv', 'lxx', 'coptic'];
-processAllTranslations(TRANSLATIONS)
-    .then(() => console.log('All translations processed'))
-    .catch(err => console.error('Unexpected error:', err.message));
+// processAllTranslations(TRANSLATIONS)
+//     .then(() => console.log('All translations processed'))
+//     .catch(err => console.error('Unexpected error:', err.message));
 
+retrieveAllTranslations(TRANSLATIONS)
+    .then(() => console.log('All translations retrieved'))
+    .catch(err => console.error('Unexpected error:', err.message));
