@@ -46,8 +46,12 @@ async function fetchVersesForChapter(translation, book, chapter) {
     }
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function processAllTranslations(translations) {
-    for (const translation of translations) {
+    for (const translation in translations) {
         console.log(`Processing translation: ${translation}`);
 
         const books = await fetchBooksForTranslation(translation);
@@ -57,8 +61,9 @@ async function processAllTranslations(translations) {
         // }
 
         for (const book in books) {
-            // console.log(`  Processing book: ${book}`);
-
+              // Wait 500ms between books
+            console.log(`  Processing book: ${book}`);
+            const start = Date.now();
             const chapters = await fetchChaptersForBook(translation, book);
             // if (chapters.length === 0) {
             //     console.warn(`No chapters found for ${book} (${translation})`);
@@ -67,9 +72,14 @@ async function processAllTranslations(translations) {
 
             for (const chapter in chapters) {
                 // console.log(`    Processing chapter: ${chapter}`);
-
+                // await sleep(10);
                 const verses = await fetchVersesForChapter(translation, book, chapter);
                 // console.log(`      Fetched verses for ${book} ${chapter}`);
+            }
+            const duration = Date.now() - start;
+            if (duration > 5000) {
+                console.log("Server backup: waiting 10 seconds");
+                await sleep(10000);
             }
         }
     }
@@ -78,7 +88,7 @@ async function processAllTranslations(translations) {
 
 // Example usage:
 const translations = ['kjv', 'lxx', 'coptic'];
-processAllTranslations(translations)
+processAllTranslations(TRANSLATIONS)
     .then(() => console.log('All translations processed'))
     .catch(err => console.error('Unexpected error:', err.message));
 
