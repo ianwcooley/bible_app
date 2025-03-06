@@ -326,6 +326,18 @@ const BOOKS = {
     "83": {
         "name": "IV Maccabees",
         "chapters": {}
+    },
+    "1000": {
+        "name": "Laodiceans",
+    },
+    "1001": {
+        "name": "Epistle of Jeremiah",
+    },
+    "1002": {
+        "name": "Psalms of Solomon",
+    },
+    "1003": {
+        "name": "Odes",
     }
 };
 
