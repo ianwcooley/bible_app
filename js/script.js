@@ -103,6 +103,24 @@ async function updateTranslationsWithVerse(bookNumber, chapterNumber, verseNumbe
     }
 }
 
+// Master update functions to tie everything together:
+async function handleBookChange(bookNumber, chapterNumber, verseNumber) {
+    // console.log('updating translations with book');
+    await updateTranslationsWithBook(bookNumber);
+    await updateTranslationsWithChapter(bookNumber, chapterNumber); // Default to Chapter 1
+    await updateTranslationsWithVerse(bookNumber, chapterNumber, verseNumber); // Default to Verse 1
+}
+
+async function handleChapterChange(bookNumber, chapterNumber, verseNumber) {
+    // console.log('updating translations with chapter');
+    await updateTranslationsWithChapter(bookNumber, chapterNumber);
+    await updateTranslationsWithVerse(bookNumber, chapterNumber, verseNumber); // Default to Verse 1
+}
+
+async function handleVerseChange(bookNumber, chapterNumber, verseNumber) {
+    // console.log('updating translations with verse');
+    await updateTranslationsWithVerse(bookNumber, chapterNumber, verseNumber);
+}
 
 
 
@@ -159,8 +177,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Set up event listeners
-    bookSelect.addEventListener('change', populateChapters);
-    chapterSelect.addEventListener('change', populateVerses);
+    let suppressEvents = false;
+
+    bookSelect.addEventListener('change', () => {
+        suppressEvents = true;
+        populateChapters();
+        populateVerses();
+        suppressEvents = false; 
+        handleBookChange(bookSelect.value, chapterSelect.value, verseSelect.value);
+    });
+
+    chapterSelect.addEventListener('change', () => {
+        if (suppressEvents) return;
+        suppressEvents = true;
+        populateVerses();
+        suppressEvents = false;
+        handleChapterChange(bookSelect.value, chapterSelect.value, verseSelect.value);
+    });
+    
+    verseSelect.addEventListener('change', () => {
+        if (suppressEvents) return;
+        handleVerseChange(bookSelect.value, chapterSelect.value, verseSelect.value);
+    });
 
     // Initial population on page load
     populateBooks();
