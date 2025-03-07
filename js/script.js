@@ -109,20 +109,50 @@ async function handleBookChange(bookNumber, chapterNumber, verseNumber) {
     await updateTranslationsWithBook(bookNumber);
     await updateTranslationsWithChapter(bookNumber, chapterNumber); // Default to Chapter 1
     await updateTranslationsWithVerse(bookNumber, chapterNumber, verseNumber); // Default to Verse 1
+    await fetchAndDisplayVerses(bookNumber, chapterNumber, verseNumber);
 }
 
 async function handleChapterChange(bookNumber, chapterNumber, verseNumber) {
     // console.log('updating translations with chapter');
     await updateTranslationsWithChapter(bookNumber, chapterNumber);
     await updateTranslationsWithVerse(bookNumber, chapterNumber, verseNumber); // Default to Verse 1
+    await fetchAndDisplayVerses(bookNumber, chapterNumber, verseNumber);
 }
 
 async function handleVerseChange(bookNumber, chapterNumber, verseNumber) {
     // console.log('updating translations with verse');
     await updateTranslationsWithVerse(bookNumber, chapterNumber, verseNumber);
+    await fetchAndDisplayVerses(bookNumber, chapterNumber, verseNumber);
 }
 
+// Update the html with the verse in all of the available translations
+async function fetchAndDisplayVerses(bookNumber, chapterNumber, verseNumber) {
+    const verseDisplay = document.getElementById('verseDisplay');
+    verseDisplay.innerHTML = '';  // Clear existing content
 
+    for (const translation of translationsWithVerse) {
+        const url = `https://query.getbible.net/v2/${translation}/${bookNumber} ${chapterNumber}:${verseNumber}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            for (chapter in data) {
+                const verseObj = data[chapter].verses.find(v => v.verse.toString() === verseNumber);
+                const verseText = verseObj ? verseObj.text : '(Verse not found)';
+
+                const verseContainer = document.createElement('div');
+                verseContainer.innerHTML = `<strong>${translation}:</strong> ${verseText}`;
+                verseDisplay.appendChild(verseContainer);
+            }
+
+        } catch (error) {
+            console.error(`Failed to fetch verse for ${translation}:`, error);
+            const errorContainer = document.createElement('div');
+            errorContainer.innerHTML = `<strong>${translation}:</strong> Error loading verse`;
+            verseDisplay.appendChild(errorContainer);
+        }
+    }
+}
 
 // When the page first loads:
 document.addEventListener('DOMContentLoaded', () => {
