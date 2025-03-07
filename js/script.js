@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Populate chapters based on selected book
     function populateChapters() {
         chapterSelect.innerHTML = '';  // Clear previous chapters
-        verseSelect.innerHTML = '';    // Clear verses too (since chapters changed)
+        // verseSelect.innerHTML = '';    // Clear verses too (since chapters changed)
 
         const selectedBook = bookSelect.value;
         const chapters = BOOKS[selectedBook].chapters;
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Auto-populate verses for the first chapter immediately
-        populateVerses();
+        // populateVerses();
     }
 
     // Populate verses based on selected chapter
@@ -175,6 +175,12 @@ document.addEventListener('DOMContentLoaded', () => {
             verseSelect.appendChild(option);
         });
     }
+
+    populateBooks();
+    populateChapters();
+    populateVerses();
+    // get translations with the book/chapter/verse we start with
+    handleBookChange(bookSelect.value, chapterSelect.value, verseSelect.value); 
 
     // Set up event listeners
     let suppressEvents = false;
@@ -194,14 +200,14 @@ document.addEventListener('DOMContentLoaded', () => {
         suppressEvents = false;
         handleChapterChange(bookSelect.value, chapterSelect.value, verseSelect.value);
     });
-    
+
     verseSelect.addEventListener('change', () => {
         if (suppressEvents) return;
         handleVerseChange(bookSelect.value, chapterSelect.value, verseSelect.value);
     });
 
-    // Initial population on page load
-    populateBooks();
-    populateChapters();  // Trigger population of first book's chapters/verses
+    // // Initial population on page load
+    // populateBooks();
+    // populateChapters();  // Trigger population of first book's chapters/verses
 });
 
