@@ -130,6 +130,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const chapterSelect = document.getElementById('chapter');
     const verseSelect = document.getElementById('verse');
 
+    // Disable dropdowns while things are changing so user can't mess things up
+    function setDropdownsDisabled(disabled) {
+        bookSelect.disabled = disabled;
+        chapterSelect.disabled = disabled;
+        verseSelect.disabled = disabled;
+    }
+
     // Populate the books dropdown from BOOKS object
     function populateBooks() {
         for (const bookNumber in BOOKS) {
@@ -180,31 +187,52 @@ document.addEventListener('DOMContentLoaded', () => {
     populateChapters();
     populateVerses();
     // get translations with the book/chapter/verse we start with
-    handleBookChange(bookSelect.value, chapterSelect.value, verseSelect.value); 
+    setDropdownsDisabled(true);
+    handleBookChange(bookSelect.value, chapterSelect.value, verseSelect.value).then(() => {
+        setDropdownsDisabled(false);
+    });
+
 
     // Set up event listeners
     let suppressEvents = false;
 
-    bookSelect.addEventListener('change', () => {
+    bookSelect.addEventListener('change', async () => {
         suppressEvents = true;
+        setDropdownsDisabled(true);
+    
         populateChapters();
         populateVerses();
-        suppressEvents = false; 
-        handleBookChange(bookSelect.value, chapterSelect.value, verseSelect.value);
+    
+        await handleBookChange(bookSelect.value, chapterSelect.value, verseSelect.value);
+    
+        setDropdownsDisabled(false);
+        suppressEvents = false;
     });
+    
 
-    chapterSelect.addEventListener('change', () => {
+    chapterSelect.addEventListener('change', async () => {
         if (suppressEvents) return;
         suppressEvents = true;
+        setDropdownsDisabled(true);
+    
         populateVerses();
+    
+        await handleChapterChange(bookSelect.value, chapterSelect.value, verseSelect.value);
+    
+        setDropdownsDisabled(false);
         suppressEvents = false;
-        handleChapterChange(bookSelect.value, chapterSelect.value, verseSelect.value);
     });
+    
 
-    verseSelect.addEventListener('change', () => {
+    verseSelect.addEventListener('change', async () => {
         if (suppressEvents) return;
-        handleVerseChange(bookSelect.value, chapterSelect.value, verseSelect.value);
+        setDropdownsDisabled(true);
+    
+        await handleVerseChange(bookSelect.value, chapterSelect.value, verseSelect.value);
+    
+        setDropdownsDisabled(false);
     });
+    
 
     // // Initial population on page load
     // populateBooks();
