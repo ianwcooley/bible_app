@@ -1,8 +1,112 @@
 
 // script.js
 
-// This assumes constants.js is already loaded, providing the BOOKS object.
+// This assumes constants.js is already loaded, providing the BOOKS and TRANSLATIONS objects.
 
+// These arrays keep track of which translations contain the given book,
+// chapter, and verse, respectively:
+let translationsWithBook = [];
+let translationsWithChapter = [];
+let translationsWithVerse = [];
+
+// These functions call the API to see if a given translation contains the given
+// book, chapter, or verse, respectively:
+async function translationHasBook(translation, bookNumber) {
+    const url = `https://api.getbible.net/v2/${translation}/books.json`;
+    try {
+        console.log(`Getting books for ${translation}`);
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        const books = await response.json();
+        if (books.hasOwnProperty(bookNumber)) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error('Fetch failed:', error);
+    }
+}
+async function translationHasChapter(translation, bookNumber, chapterNumber) {
+    const url = `https://api.getbible.net/v2/${translation}/${bookNumber}/chapters.json`;
+    try {
+        console.log(`Getting chapters for ${translation} book ${bookNumber}`);
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        const chapters = await response.json();
+        if (chapters.hasOwnProperty(chapterNumber)) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error('Fetch failed:', error);
+    }
+}
+async function translationHasVerse(translation, bookNumber, chapterNumber, verseNumber) {
+    const url = `https://api.getbible.net/v2/${translation}/${bookNumber}/${chapterNumber}.json`;
+    try {
+        console.log(`Getting chapters for ${translation} book ${bookNumber}`);
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        const chapter = await response.json();
+        const verses = chapter.verses.map(verseObject => verseObject.verse.toString());
+        if (verses.includes(verseNumber)) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error('Fetch failed:', error);
+    }
+}
+
+// We call this function when we first load the page, or change the selected book.
+// It updates the translationsWithBook array to contain only the translations that
+// contain the selected book.
+async function updateTranslationsWithBook(bookNumber) {
+    translationsWithBook = [];
+
+    for (const translation in TRANSLATIONS) {
+        if (await translationHasBook(translation, bookNumber)) {
+            translationsWithBook.push(translation);
+        }
+    }
+}
+
+// We call this function when we change the selected chapter.
+// It updates the translationsWithChapter array to contain only the translations that
+// contain the selected chapter.
+async function updateTranslationsWithChapter(bookNumber, chapterNumber) {
+    translationsWithChapter = [];
+
+    for (const translation of translationsWithBook) {
+        if (await translationHasChapter(translation, bookNumber, chapterNumber)) {
+            translationsWithChapter.push(translation);
+        }
+    }
+}
+
+// We call this function when we change the selected verse.
+// It updates the translationsWithVerse array to contain only the translations that
+// contain the selected verse.
+async function updateTranslationsWithVerse(bookNumber, chapterNumber, verseNumber) {
+    translationsWithVerse = [];
+
+    for (const translation of translationsWithChapter) {
+        if (await translationHasVerse(translation, bookNumber, chapterNumber, verseNumber)) {
+            translationsWithVerse.push(translation);
+        }
+    }
+}
+
+
+
+
+// When the page first loads:
 document.addEventListener('DOMContentLoaded', () => {
     const bookSelect = document.getElementById('book');
     const chapterSelect = document.getElementById('chapter');
